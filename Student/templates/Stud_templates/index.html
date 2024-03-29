@@ -164,7 +164,7 @@
 						<div class="collapse in" id="collapseExample" aria-expanded="true">
 							{% if request.user.student_profile %}
 							<ul class="nav">
-								
+
 								<li>
 									<a href="{% url 'profile_view' request.user.id %}">
 										<span class="link-collapse">My Profile</span>
@@ -194,20 +194,22 @@
 							<!-- <span class="badge badge-count">5</span> -->
 						</a>
 					</li>
+					{% if request.user.student_profile %}
 					<li class="nav-item active">
-						<a href="#">
+						<a href="{% url 'take_aptitude'  %}">
 							<i class="la la-table"></i>
 							<p>Take Aptitiude</p>
 							<!-- <span class="badge badge-count">14</span> -->
 						</a>
 					</li>
 					<li class="nav-item active">
-						<a href="#">
+						<a href="{% url 'filterd_college' request.user.id %}">
 							<i class="la la-keyboard-o"></i>
 							<p>View Marks & Colleges</p>
 							<!-- <span class="badge badge-count">50</span> -->
 						</a>
 					</li>
+					{% endif %}
 
 					<!-- <li class="nav-item">
 							<a href="tables.html">
@@ -745,36 +747,36 @@
 				</div>
 			</div>
 			<div style="margin-top: 380px;">
-			<footer class="footer" >
-				
-				<div class="container-fluid">
-					<nav class="pull-left">
-						<ul class="nav">
-							<li class="nav-item">
-								<a class="nav-link" href="http://www.themekita.com">
-									ThemeKita
-								</a>
-							</li>
-							<li class="nav-item">
-								<a class="nav-link" href="#">
-									Help
-								</a>
-							</li>
-							<li class="nav-item">
-								<a class="nav-link" href="https://themewagon.com/license/#free-item">
-									Licenses
-								</a>
-							</li>
-						</ul>
-					</nav>
-					<div class="copyright ml-auto">
-						2024, made with <i class="la la-heart heart text-danger"></i> by <a
-							href="http://www.themekita.com">Luminar technolab</a>
+				<footer class="footer">
+
+					<div class="container-fluid">
+						<nav class="pull-left">
+							<ul class="nav">
+								<!-- <li class="nav-item">
+									<a class="nav-link" href="http://www.themekita.com">
+										ThemeKita
+									</a>
+								</li>
+								<li class="nav-item">
+									<a class="nav-link" href="#">
+										Help
+									</a>
+								</li>
+								<li class="nav-item">
+									<a class="nav-link" href="https://themewagon.com/license/#free-item">
+										Licenses
+									</a>
+								</li> -->
+							</ul>
+						</nav>
+						<div class="copyright ml-auto">
+							2024, made with <i class="la la-heart heart text-danger"></i> by <a
+								href="https://www.luminartechnolab.com/">Luminar technolab</a>
+						</div>
 					</div>
-				</div>
-			
-			</footer>
-		</div>
+
+				</footer>
+			</div>
 		</div>
 	</div>
 	</div>
@@ -808,7 +810,7 @@
 <script src="{% static 'assets/js/core/bootstrap.min.js' %}"></script>
 <script src="{% static 'assets/js/plugin/chartist/chartist.min.js' %}"></script>
 <script src="{% static 'assets/js/plugin/chartist/plugin/chartist-plugin-tooltip.min.js' %}"></script>
-<script src="{% static 'assets/js/plugin/bootstrap-notify/bootstrap-notify.min.js' %}"></script>
+<script src="assets/js/plugin/bootstrap-notify/bootstrap-notify.min.js"></script>
 <script src="{% static 'assets/js/plugin/bootstrap-toggle/bootstrap-toggle.min.js' %}"></script>
 <script src="{% static 'assets/js/plugin/jquery-mapael/jquery.mapael.min.js' %}"></script>
 <script src="{% static 'assets/js/plugin/jquery-mapael/maps/world_countries.min.js' %}"></script>

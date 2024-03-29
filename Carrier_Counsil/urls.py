@@ -33,5 +33,8 @@ urlpatterns = [
     path('User_reg/',views.UserRegistration.as_view(),name="U_reg"),
     path('login/',views.LoginView.as_view(),name="login"),
     path('logout/',views.Logout.as_view(),name="logout"),
+    path('colle_list/',views.CollegeView.as_view(),name="col_list"),
+    path('cour_list/<int:pk>/',views.CourseView.as_view(),name="cour_list"),
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+

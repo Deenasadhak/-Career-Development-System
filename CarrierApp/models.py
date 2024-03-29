@@ -50,7 +50,16 @@ class Question(models.Model):
 class Answer(models.Model):
     question=models.ForeignKey(Question, on_delete=models.CASCADE,null=True)
     answer=models.CharField(max_length=30,null=True)
-    is_true=models.BooleanField(null=True)
+
+    TRUE_FALSE_CHOICES = [
+        (True, 'True'),
+        (False, 'False'),
+    ]
+
+    is_true=models.BooleanField(choices=TRUE_FALSE_CHOICES, default=False)
+
+    def __str__(self):
+        return self.answer
 
     
 

@@ -3,45 +3,45 @@
 <html>
 
 <head>
-	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-	<title>Student Dashboard</title>
-	<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no'
-		name='viewport' />
-	<link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}">
-	<link rel="stylesheet"
-		href="{% static 'https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i' %}">
-	<link rel="stylesheet" href="{% static 'assets/css/ready.css' %}">
-	<link rel="stylesheet" href="{% static 'assets/css/demo.css' %}">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title>Admin Dashboard</title>
+    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no'
+        name='viewport' />
+    <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}">
+    <link rel="stylesheet"
+        href="{% static 'https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/ready.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/demo.css' %}">
 </head>
 
 <body>
-	<div class="wrapper">
-		<div class="main-header">
-			<div class="logo-header">
-				<a href="{% url 'Stud_home' %}" class="logo">
-					Student Dashboard
-				</a>
-				<button class="navbar-toggler sidenav-toggler ml-auto" type="button" data-toggle="collapse"
-					data-target="collapse" aria-controls="sidebar" aria-expanded="false" aria-label="Toggle navigation">
-					<span class="navbar-toggler-icon"></span>
-				</button>
-				<button class="topbar-toggler more"><i class="la la-ellipsis-v"></i></button>
-			</div>
-			<nav class="navbar navbar-header navbar-expand-lg">
-				<div class="container-fluid">
+    <div class="wrapper">
+        <div class="main-header">
+            <div class="logo-header">
+                <a href="{% url 'super_home' %}" class="logo">
+                    Admin Dashboard
+                </a>
+                <button class="navbar-toggler sidenav-toggler ml-auto" type="button" data-toggle="collapse"
+                    data-target="collapse" aria-controls="sidebar" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <button class="topbar-toggler more"><i class="la la-ellipsis-v"></i></button>
+            </div>
+            <nav class="navbar navbar-header navbar-expand-lg">
+                <div class="container-fluid">
 
-					<form class="navbar-left navbar-form nav-search mr-md-3" action="">
-						<div class="input-group">
-							<input type="text" placeholder="Search ..." class="form-control">
-							<div class="input-group-append">
-								<span class="input-group-text">
-									<i class="la la-search search-icon"></i>
-								</span>
-							</div>
-						</div>
-					</form>
-					<ul class="navbar-nav topbar-nav ml-md-auto align-items-center">
-						<!-- <li class="nav-item dropdown hidden-caret">
+                    <form class="navbar-left navbar-form nav-search mr-md-3" action="">
+                        <div class="input-group">
+                            <input type="text" placeholder="Search ..." class="form-control">
+                            <div class="input-group-append">
+                                <span class="input-group-text">
+                                    <i class="la la-search search-icon"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </form>
+                    <ul class="navbar-nav topbar-nav ml-md-auto align-items-center">
+                        <!-- <li class="nav-item dropdown hidden-caret">
 							<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
 								data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 								<i class="la la-envelope"></i>
@@ -53,7 +53,7 @@
 								<a class="dropdown-item" href="#">Something else here</a>
 							</div>
 						</li> -->
-						<!-- <li class="nav-item dropdown hidden-caret">
+                        <!-- <li class="nav-item dropdown hidden-caret">
 							<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
 								data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 								<i class="la la-bell"></i>
@@ -112,57 +112,57 @@
 								</li>
 							</ul>
 						</li> -->
-						<li class="nav-item dropdown">
-							<a class="dropdown-toggle profile-pic" data-toggle="dropdown" href="#"
-								aria-expanded="false"> <img src="{% static 'assets/img/user.png' %}" alt="user-img"
-									width="36" class="img-circle"><span>{{request.user}}</span></span> </a>
-							<ul class="dropdown-menu dropdown-user">
-								<li>
-									<div class="user-box">
-										<div class="u-img"><img src="{% static 'assets/img/user.png' %}" alt="user">
-										</div>
-										<div class="u-text">
-											<h4>{{request.user}}</h4>
-											<p class="text-muted">{{request.user.email}}</p><a
-												href="{%  url 'logout' %}"
-												class="btn btn-rounded btn-danger btn-sm">Logout</a>
-										</div>
-									</div>
-								</li>
-								<!-- <div class="dropdown-divider"></div>
+                        <li class="nav-item dropdown">
+                            <a class="dropdown-toggle profile-pic" data-toggle="dropdown" href="#"
+                                aria-expanded="false"> <img src="{% static 'assets/img/user.png' %}" alt="user-img"
+                                    width="36" class="img-circle"><span>{{request.user}}</span></span> </a>
+                            <ul class="dropdown-menu dropdown-user">
+                                <li>
+                                    <div class="user-box">
+                                        <div class="u-img"><img src="{% static 'assets/img/user.png' %}" alt="user">
+                                        </div>
+                                        <div class="u-text">
+                                            <h4>{{request.user}}</h4>
+                                            <p class="text-muted">{{request.user.email}}</p><a
+                                                href="{%  url 'logout' %}"
+                                                class="btn btn-rounded btn-danger btn-sm">Logout</a>
+                                        </div>
+                                    </div>
+                                </li>
+                                <!-- <div class="dropdown-divider"></div>
 								<a class="dropdown-item" href="#"><i class="ti-user"></i>Edit Profile</a> -->
-								<!-- <a class="dropdown-item" href="#"></i> My Balance</a>
+                                <!-- <a class="dropdown-item" href="#"></i> My Balance</a>
 									<a class="dropdown-item" href="#"><i class="ti-email"></i> Inbox</a>
 									<div class="dropdown-divider"></div>
 									<a class="dropdown-item" href="#"><i class="ti-settings"></i> Account Setting</a>
 									<div class="dropdown-divider"></div> -->
-								<!-- <a class="dropdown-item" href=""><i class="fa fa-power-off"></i>
+                                <!-- <a class="dropdown-item" href=""><i class="fa fa-power-off"></i>
 									Logout</a> -->
-							</ul>
-							<!-- /.dropdown-user -->
-						</li>
-					</ul>
-				</div>
-			</nav>
-		</div>
-		<div class="sidebar">
-			<div class="scrollbar-inner sidebar-wrapper">
-				<div class="user">
-					<div class="photo">
-						<img src="{% static 'assets/img/user.png' %}">
-					</div>
-					<div class="info">
-						<a class="" data-toggle="collapse" href="#collapseExample" aria-expanded="true">
-							<span>
-								{{request.user}}
-								<span class="user-level">Student</span>
-								<span class="caret"></span>
-							</span>
-						</a>
-						<div class="clearfix"></div>
+                            </ul>
+                            <!-- /.dropdown-user -->
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+        <div class="sidebar">
+            <div class="scrollbar-inner sidebar-wrapper">
+                <div class="user">
+                    <div class="photo">
+                        <img src="{% static 'assets/img/user.png' %}">
+                    </div>
+                    <div class="info">
+                        <a class="" data-toggle="collapse" href="#collapseExample" aria-expanded="true">
+                            <span>
+                                {{request.user}}
+                                <span class="user-level">Admin</span>
+                                <span class="caret"></span>
+                            </span>
+                        </a>
+                        <div class="clearfix"></div>
 
-						<div class="collapse in" id="collapseExample" aria-expanded="true">
-							{% if request.user.student_profile %}
+                        <div class="collapse in" id="collapseExample" aria-expanded="true">
+                            <!-- {% if request.user.student_profile %}
 							<ul class="nav">
 								
 								<li>
@@ -182,34 +182,48 @@
 									</a>
 								</li>
 								{% endif %}
-							</ul>
-						</div>
-					</div>
-				</div>
-				<ul class="nav">
+							</ul> -->
+                        </div>
+                    </div>
+                </div>
+                <ul class="nav">
+                    <li class="nav-item active">
+                        <a href="{% url 'college_list' %}">
+                            <i class="la la-dashboard"></i>
+                            <p>View Colleges</p>
+                            <!-- <span class="badge badge-count">5</span> -->
+                        </a>
+                    </li>
+                    <li class="nav-item active">
+                        <a href="{% url 'student_list' %}">
+                            <i class="la la-table"></i>
+                            <p>View Students</p>
+                            <!-- <span class="badge badge-count">14</span> -->
+                        </a>
+                    </li>
+                    <li class="nav-item active">
+                        <a href="{% url 'Add_question' %}">
+                            <i class="la la-table"></i>
+                            <p>Add Questions</p>
+                            <!-- <span class="badge badge-count">14</span> -->
+                        </a>
+                    </li>
+                    <li class="nav-item active">
+                        <a href="{% url 'Add_answer' %}">
+                            <i class="la la-keyboard-o"></i>
+                            <p>Add answers</p>
+                            <!-- <span class="badge badge-count">50</span> -->
+                        </a>
+                    </li>
 					<li class="nav-item active">
-						<a href="">
-							<i class="la la-dashboard"></i>
-							<p>View Colleges</p>
-							<!-- <span class="badge badge-count">5</span> -->
-						</a>
-					</li>
-					<!-- <li class="nav-item active">
-						<a href="#">
-							<i class="la la-table"></i>
-							<p>Take Aptitiude</p>
-							<span class="badge badge-count">14</span>
-						</a>
-					</li>
-					<li class="nav-item active">
-						<a href="#">
+						<a href="{% url 'Q_view' %}">
 							<i class="la la-keyboard-o"></i>
-							<p>View Marks & Colleges</p>
-							<span class="badge badge-count">50</span>
+							<p>View Questions/Delete</p>
+							<!-- <span class="badge badge-count">50</span> -->
 						</a>
-					</li> -->
+					</li>
 
-					<!-- <li class="nav-item">
+                    <!-- <li class="nav-item">
 							<a href="tables.html">
 								<i class="la la-th"></i>
 								<p>Tables</p>
@@ -242,34 +256,24 @@
 								<p>Update To Pro</p>
 							</button>
 						</li>-->
-				</ul>
-			</div>
-		</div>
-		<div class="main-panel">
-			<div class="content">
-				<div class="container-fluid">
-					<h4 class="page-title">Courses</h4>
-                    <div class="card-body">
-						<table class="table table-head-bg-success table-striped table-hover">
-							<thead>
-								<tr>
-									<th scope="col">Course Name</th>
-									
-								</tr>
-							</thead>
-							<tbody>
-								{% for i in data %}
-								<tr>
-									<td>{{i.Courses}}</td>
-									
-								</tr>
-								
-								{% endfor %}
-								
-							</tbody>
-						</table>
-					</div>
-					<!-- <div class="row">
+                </ul>
+            </div>
+        </div>
+        <div class="main-panel">
+            <div class="content">
+                <div class="container-fluid">
+                    <h4 class="page-title">Add Question</h4>
+                    <form method="post">
+                        {%csrf_token%}
+                        <div class="mb-3">
+                            <label for="exampleInputEmail1" class="form-label">Questions</label>
+                            <input type="text" class="form-control" id="exampleInputEmail1"
+                                aria-describedby="emailHelp" name="question">
+                            <!-- <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div> -->
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                    <!-- <div class="row">
 						<div class="col-md-3">
 							<div class="card card-stats card-warning">
 								<div class="card-body ">
@@ -762,65 +766,65 @@
 							</div>
 						</div>
 					</div> -->
-				</div>
-			</div>
-			<div style="margin-top: 380px;">
-			<footer class="footer" >
-				
-				<div class="container-fluid">
-					<nav class="pull-left">
-						<ul class="nav">
-							<!-- <li class="nav-item">
-								<a class="nav-link" href="http://www.themekita.com">
-									ThemeKita
-								</a>
-							</li>
-							<li class="nav-item">
-								<a class="nav-link" href="#">
-									Help
-								</a>
-							</li>
-							<li class="nav-item">
-								<a class="nav-link" href="https://themewagon.com/license/#free-item">
-									Licenses
-								</a>
-							</li> -->
-						</ul>
-					</nav>
-					<div class="copyright ml-auto">
-						2024, made with <i class="la la-heart heart text-danger"></i> by <a
-							href="https://www.luminartechnolab.com/">Luminar technolab</a>
-					</div>
-				</div>
-			
-			</footer>
-		</div>
-		</div>
-	</div>
-	</div>
-	<!-- Modal -->
-	<div class="modal fade" id="modalUpdate" tabindex="-1" role="dialog" aria-labelledby="modalUpdatePro"
-		aria-hidden="true">
-		<div class="modal-dialog modal-dialog-centered" role="document">
-			<div class="modal-content">
-				<div class="modal-header bg-primary">
-					<h6 class="modal-title"><i class="la la-frown-o"></i> Under Development</h6>
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-				</div>
-				<div class="modal-body text-center">
-					<p>Currently the pro version of the <b>Ready Dashboard</b> Bootstrap is in progress development</p>
-					<p>
-						<b>We'll let you know when it's done</b>
-					</p>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-				</div>
-			</div>
-		</div>
-	</div>
+                </div>
+            </div>
+            <div style="margin-top: 380px;">
+                <footer class="footer">
+
+                    <div class="container-fluid">
+                        <nav class="pull-left">
+                            <ul class="nav">
+                                <!-- <li class="nav-item">
+                                    <a class="nav-link" href="http://www.themekita.com">
+                                        ThemeKita
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#">
+                                        Help
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="https://themewagon.com/license/#free-item">
+                                        Licenses
+                                    </a>
+                                </li> -->
+                            </ul>
+                        </nav>
+                        <div class="copyright ml-auto">
+                            2024, made with <i class="la la-heart heart text-danger"></i> by <a
+                                href="https://www.luminartechnolab.com/">Luminar technolab</a>
+                        </div>
+                    </div>
+
+                </footer>
+            </div>
+        </div>
+    </div>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="modalUpdate" tabindex="-1" role="dialog" aria-labelledby="modalUpdatePro"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-primary">
+                    <h6 class="modal-title"><i class="la la-frown-o"></i> Under Development</h6>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body text-center">
+                    <p>Currently the pro version of the <b>Ready Dashboard</b> Bootstrap is in progress development</p>
+                    <p>
+                        <b>We'll let you know when it's done</b>
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 <script src="{% static 'assets/js/core/jquery.3.2.1.min.js' %}"></script>
 <script src="{% static 'assets/js/plugin/jquery-ui-1.12.1.custom/jquery-ui.min.js' %}"></script>
@@ -828,7 +832,7 @@
 <script src="{% static 'assets/js/core/bootstrap.min.js' %}"></script>
 <script src="{% static 'assets/js/plugin/chartist/chartist.min.js' %}"></script>
 <script src="{% static 'assets/js/plugin/chartist/plugin/chartist-plugin-tooltip.min.js' %}"></script>
-<script src="assets/js/plugin/bootstrap-notify/bootstrap-notify.min.js"></script>
+<!-- <script src="{% static 'assets/js/plugin/bootstrap-notify/bootstrap-notify.min.js' %}"></script> -->
 <script src="{% static 'assets/js/plugin/bootstrap-toggle/bootstrap-toggle.min.js' %}"></script>
 <script src="{% static 'assets/js/plugin/jquery-mapael/jquery.mapael.min.js' %}"></script>
 <script src="{% static 'assets/js/plugin/jquery-mapael/maps/world_countries.min.js' %}"></script>

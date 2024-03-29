@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 from django.views.generic import TemplateView,View,CreateView,FormView
 from CarrierApp.forms import Registration,LoginForm
-from CarrierApp.models import Login
+from CarrierApp.models import Login,College,Course
 from django.urls import reverse_lazy
 from django.contrib.auth import authenticate,login,logout
 # Create your views here.
@@ -57,7 +57,20 @@ class LoginView(FormView):
 class Logout(View):
     def get(self,request):
         logout(request)
-        return redirect("home")        
+        return redirect("home")   
+
+
+class CollegeView(View):
+    def get(self,request):
+        data=College.objects.all()
+        return render(request,'collegelist.html',{"data":data})  
+
+class CourseView(View):
+    def get(self,request,*args,**kwargs):
+        id=kwargs.get('pk')
+        data=Course.objects.filter(College_name=id)
+        return render(request,'courselist.html',{"data":data})    
+
 
       
 

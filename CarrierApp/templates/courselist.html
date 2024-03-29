@@ -9,7 +9,7 @@
       <meta name="viewport" content="width=device-width, initial-scale=1">
       <meta name="viewport" content="initial-scale=1, maximum-scale=1">
       <!-- site metas -->
-      <title>Login</title>
+      <title>Sign up</title>
       <meta name="keywords" content="">
       <meta name="description" content="">
       <meta name="author" content="">
@@ -96,36 +96,58 @@
          <!-- end header inner --> 
       </header>
       <!-- end header -->
-      <div style="background-color: rgb(241, 193, 35); padding-top: 25px; padding-bottom: 25px;">
-         <!-- <div class="container">
-             <div class="row">
-                 <div class="col-md-12"> -->
-                     <div class="titlepage">
-                         <h1 style="text-align: center;">Login</h1>
-                     </div>
-                 <!-- </div>
-             </div> -->
-         </div>
+      <!-- <div class="brand_color" style="padding-top: 100px; margin-bottom: 200px;">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="titlepage">
+                        <h2></h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div> -->
 
     <!-- contact -->
     <div class="contact">
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
+                    <b><h4 class="page-title" style="text-align: center;">Courses</h4></b>
+                    <div class="card-body">
+						<table class="table table-head-bg-success table-striped table-hover">
+							<thead>
+								<tr style="background-color: rgba(243, 208, 9, 0.993);">
+                                    <th scope="col">Course Name</th>
 
-                    <form class="main_form" method="post">
+								</tr>
+							</thead>
+							<tbody>
+								{% for i in data %}
+								<tr>
+									<td>{{i.Courses}}</td>
+								</tr>
+								
+								{% endfor %}
+								
+							</tbody>
+						</table>
+					</div>
+
+                    <!-- <form class="main_form" method="post">
                         {%csrf_token%}
                         <div class="row">
-                            <!-- <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
                                 <input class="form-control" placeholder="User name" type="text" name="username">
                             </div>
                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
                                 <input class="form-control" placeholder="Email" type="text" name="email">
-                            </div> -->
-                            <div class="col-md-12">
-                                <input class="form-control" placeholder="User name" type="text" name="username">
                             </div>
-                            <!-- <div class="col-md-12">
+                            <div class="col-md-12">
+                                <input class="form-control" placeholder="Full name" type="text" name="name">
+                            </div>
+                            <div class="col-md-12">
                               <div class="form-check">
                                  <input class="form-check-input" type="radio" name="is_student" value="True" id="flexRadioDefault1">
                                  <label class="form-check-label" for="flexRadioDefault1">
@@ -133,25 +155,25 @@
                                  </label>
                                </div>
                                <div class="form-check">
-                                 <input class="form-check-input" type="radio" name="is_student" id="flexRadioDefault2" checked>
+                                 <input class="form-check-input" type="radio" name="is_student" value="False" id="flexRadioDefault2" checked>
                                  <label class="form-check-label" for="flexRadioDefault2">
                                    As College
                                  </label>
                                </div>
-                            </div> -->
+                            </div>
                             <div class="col-md-12 mt-3">
                               <input class="form-control" placeholder="Password(Required digits and @/./+/-/_ )" type="password" name="password">
                           </div>
                             
                             
-                            <!-- <div class="col-md-12">
+                            <div class="col-md-12">
                                 <textarea class="textarea" placeholder="Message"></textarea>
-                            </div> -->
+                            </div>
                             <div class=" col-md-12">
                                 <button class="send" type="submit">SUBMIT</button>
                             </div>
                         </div>
-                    </form>
+                    </form> -->
                 </div>
             </div>
         </div>

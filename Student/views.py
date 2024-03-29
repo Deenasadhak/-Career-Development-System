@@ -1,9 +1,9 @@
 from django.forms import BaseModelForm
 from django.http import HttpResponse
 from django.shortcuts import render,redirect
-from django.views.generic import TemplateView,View,CreateView,UpdateView
+from django.views.generic import TemplateView,View,CreateView,UpdateView,ListView
 from Student.forms import Stud_profileForm
-from CarrierApp.models import Student,College,Course
+from CarrierApp.models import Student,College,Course,Question,Answer,Mark
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 
@@ -57,14 +57,99 @@ class CourseView(View):
         id=kwargs.get('pk')
         data=Course.objects.filter(College_name=id)
         return render(request,'Stud_templates/CourseView.html',{"data":data})
+from django.http import Http404
+from django.shortcuts import get_object_or_404
+
+class AptitudeTestView(ListView):
+    model = Question
+    template_name = 'Stud_templates/aptitude_test.html'
+    context_object_name = 'questions'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['answers'] = Answer.objects.filter(question__in=context['questions'])
+        student_name = self.request.user.student_profile
+        try:
+            mark = Mark.objects.get(student_name=student_name)
+        except Mark.DoesNotExist:
+            mark = None
+        context['mark'] = mark
+        return context
+
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     student_name = self.request.user.student_profile
+    #     mark = get_object_or_404(Mark, student_name=student_name)
+    #     context['mark'] = mark
+    #     return context
+
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     student_name = self.request.user.student_profile
+    #     try:
+    #         mark = Mark.objects.get(student_name=student_name)
+    #     except Mark.DoesNotExist:
+    #         mark = None
+    #     context['mark'] = mark
+    #     return context
 
 
-               
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     id=self.request.user.id
+    #     print(id)
+    #     std_id=Student.objects.get(user=id)
+    #     print(std_id.id)
+    #     print(std_id.user.id)
+    #     # st=Mark.objects.get(student_name=std_id.id)
+    #     # print(st)
+    #     context['std_id']=Student.objects.get(user=id)
+    #     context['answers'] = Answer.objects.filter(question__in=context['questions'])
+    #     try:
+    #         # std_id = # Retrieve student id based on your logic
+    #         st = Mark.objects.get(student_name=std_id.id)
+    #         context['mark'] = st
+    #     except Mark.DoesNotExist:
+    #         # Handle the case when the Mark object does not exist
+    #         raise Http404("Mark does not exist for this student")
+    #     # return context
+    #     # context['mark']= Mark.objects.get(student_name=std_id.id)
+    #     return context
     
+    def post(self, request, *args, **kwargs):
+        total_marks = self.calculate_total_marks(request.POST)
+        student_name = request.user.student_profile  # Assuming user is authenticated and has student profile
+        Mark.objects.create(student_name=student_name, Mark=total_marks)
+        return redirect('Stud_home')  # Redirect to a page showing the result or any other desired page
+
+    def calculate_total_marks(self, post_data):
+        total_marks = 0
+        for key, value in post_data.items():
+            if key.startswith('answer_'):
+                answer_id = int(value)
+                answer = Answer.objects.get(id=answer_id)
+                if answer.is_true:
+                    total_marks += 5  # Assuming each correct answer contributes 1 mark
+        return total_marks
     
 
+class Collegelist_Mark(View):
+    def get(self, request, *args, **kwargs):
+        student_id = kwargs.get('pk')
+        student_data = Student.objects.filter(user=student_id)
+        college_list = []
 
+        for student in student_data:
+            student_id = student.id
+            marks = Mark.objects.filter(student_name=student_id)
+            for mark in marks:
+                aptitude_mark = mark.Mark
+                colleges = College.objects.filter(cut_off_mark__lte=aptitude_mark)
+                college_list.extend(colleges)
 
+        # Now college_list contains all colleges with cutoff marks less than or equal to the aptitude marks
+        # You can further process college_list as needed
 
+        return render(request, 'Stud_templates/filterd_college.html', {"data": college_list})       
 
 
