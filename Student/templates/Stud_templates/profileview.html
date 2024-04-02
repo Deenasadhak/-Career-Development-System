@@ -194,14 +194,14 @@
                         </a>
                     </li>
                     <li class="nav-item active">
-                        <a href="#">
+                        <a href="{% url 'take_aptitude'  %}">
                             <i class="la la-table"></i>
                             <p>Take Aptitiude</p>
                             <!-- <span class="badge badge-count">14</span> -->
                         </a>
                     </li>
                     <li class="nav-item active">
-                        <a href="#">
+                        <a href="{% url 'filterd_college' request.user.id %}">
                             <i class="la la-keyboard-o"></i>
                             <p>View Marks & Colleges</p>
                             <!-- <span class="badge badge-count">50</span> -->
@@ -247,7 +247,7 @@
         <div class="main-panel">
             <div class="content">
                 <div class="container-fluid">
-                    <h4 class="page-title">Dashboard</h4>
+                    <h4 class="page-title">Profile</h4>
                     <div class="card mb-4">
                         <div class="card-body">
                             {% for i in data %}
