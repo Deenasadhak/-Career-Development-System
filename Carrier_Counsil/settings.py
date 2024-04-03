@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'Student',
     'college',
     'Admin',
+    'django_extensions'
 ]
 
 AUTH_USER_MODEL = 'CarrierApp.Login'

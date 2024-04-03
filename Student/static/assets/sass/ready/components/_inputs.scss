@@ -107,11 +107,12 @@
 
 /*     Radio Input    */
 
-[type="radio"] {
-  &:not(:checked), &:checked {
-    // position: absolute;
-    left: -9999px;
-  }
+
+  // &:not(:checked), &:checked {
+  //   // position: absolute;
+  //   left: -9999px;
+  // }
+  [type="radio"] {
   &:not(:checked) + .form-radio-sign, &:checked + .form-radio-sign {
     position: relative;
     padding-left: 1.65em;
