@@ -18,8 +18,8 @@
 	<div class="wrapper">
 		<div class="main-header">
 			<div class="logo-header">
-				<a href="{% url 'Stud_home' %}" class="logo">
-					Student Dashboard
+				<a href="{% url 'super_home' %}" class="logo">
+					Admin Dashboard
 				</a>
 				<button class="navbar-toggler sidenav-toggler ml-auto" type="button" data-toggle="collapse"
 					data-target="collapse" aria-controls="sidebar" aria-expanded="false" aria-label="Toggle navigation">
@@ -155,40 +155,40 @@
 						<a class="" data-toggle="collapse" href="#collapseExample" aria-expanded="true">
 							<span>
 								{{request.user}}
-								<span class="user-level">Student</span>
+								<span class="user-level">Admin</span>
 								<span class="caret"></span>
 							</span>
 						</a>
 						<div class="clearfix"></div>
 
 						<div class="collapse in" id="collapseExample" aria-expanded="true">
-							{% if request.user.student_profile %}
+							<!-- {% if request.user.student_profile %} -->
 							<ul class="nav">
 								
-								<li>
+								<!-- <li>
 									<a href="{% url 'profile_view' request.user.id %}">
 										<span class="link-collapse">My Profile</span>
 									</a>
-								</li>
-								<li>
+								</li> -->
+								<!-- <li>
 									<a href="{% url 'Sprofile_edit' request.user.id %}">
 										<span class="link-collapse">Edit Profile</span>
 									</a>
-								</li>
-								{% else %}
-								<li>
+								</li> -->
+								<!-- {% else %} -->
+								<!-- <li>
 									<a href="{% url 'Stud_Aprofile' %}">
 										<span class="link-collapse">Add profile</span>
 									</a>
-								</li>
-								{% endif %}
+								</li> -->
+								<!-- {% endif %} -->
 							</ul>
 						</div>
 					</div>
 				</div>
 				<ul class="nav">
 					<li class="nav-item active">
-						<a href="{% url 'college_view' %}">
+						<a href="{% url 'college_list' %}">
 							<i class="la la-dashboard"></i>
 							<p>View Colleges</p>
 							<!-- <span class="badge badge-count">5</span> -->

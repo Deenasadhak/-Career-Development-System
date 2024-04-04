@@ -66,6 +66,12 @@ class QuestionDelete(View):
         id=kwargs.get('pk')    
         Question.objects.get(id=id).delete()
         return redirect('Q_view')
+    
+class ACourseView(View):
+    def get(self,request,*args,**kwargs):
+        id=kwargs.get('pk')
+        data=Course.objects.filter(College_name=id)
+        return render(request,'Admin_temp/course.html',{"data":data})    
 
           
 

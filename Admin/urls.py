@@ -11,5 +11,6 @@ urlpatterns=[
     path('Add_answer/',views.AddAnswer.as_view(),name="Add_answer"),
     path('question_view/',views.Questionlist.as_view(),name="Q_view"),
     path('question_delete/<int:pk>/',views.QuestionDelete.as_view(),name="Q_dele"),
+     path('acourse_view/<int:pk>/',views.ACourseView.as_view(),name='Acourse_view'),
 
 ]
