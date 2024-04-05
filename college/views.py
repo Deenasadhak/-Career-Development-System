@@ -23,7 +23,7 @@ class AddCourse(CreateView):
     template_name='college_temp/Add_course.html'
     form_class=AddCourseForm
     model=Course
-    success_url=reverse_lazy('college_home')
+    success_url=reverse_lazy('course_Add')
 
     def form_valid(self, form):
         form.instance.College_name=self.request.user.college_profile
@@ -41,7 +41,8 @@ class CollegeProfileView(View):
 class CourseDelete(View):
     def get(self, request, *args, **kwargs):
         id = kwargs.get('pk')
-        Course.objects.get(id=id).delete()
+        data=Course.objects.get(id=id)
+        data.delete()
         return redirect('college_home')
 
      

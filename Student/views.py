@@ -76,45 +76,7 @@ class AptitudeTestView(ListView):
         context['mark'] = mark
         return context
 
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     student_name = self.request.user.student_profile
-    #     mark = get_object_or_404(Mark, student_name=student_name)
-    #     context['mark'] = mark
-    #     return context
-
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     student_name = self.request.user.student_profile
-    #     try:
-    #         mark = Mark.objects.get(student_name=student_name)
-    #     except Mark.DoesNotExist:
-    #         mark = None
-    #     context['mark'] = mark
-    #     return context
-
-
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     id=self.request.user.id
-    #     print(id)
-    #     std_id=Student.objects.get(user=id)
-    #     print(std_id.id)
-    #     print(std_id.user.id)
-    #     # st=Mark.objects.get(student_name=std_id.id)
-    #     # print(st)
-    #     context['std_id']=Student.objects.get(user=id)
-    #     context['answers'] = Answer.objects.filter(question__in=context['questions'])
-    #     try:
-    #         # std_id = # Retrieve student id based on your logic
-    #         st = Mark.objects.get(student_name=std_id.id)
-    #         context['mark'] = st
-    #     except Mark.DoesNotExist:
-    #         # Handle the case when the Mark object does not exist
-    #         raise Http404("Mark does not exist for this student")
-    #     # return context
-    #     # context['mark']= Mark.objects.get(student_name=std_id.id)
-    #     return context
+    
     
     def post(self, request, *args, **kwargs):
         total_marks = self.calculate_total_marks(request.POST)

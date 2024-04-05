@@ -4,6 +4,7 @@ from CarrierApp.forms import Registration,LoginForm
 from CarrierApp.models import Login,College,Course
 from django.urls import reverse_lazy
 from django.contrib.auth import authenticate,login,logout
+from django.contrib import messages
 # Create your views here.
 
 class Home(TemplateView):
@@ -48,6 +49,7 @@ class LoginView(FormView):
                     request.session['user_type'] = 'college'
                     return redirect('college_home')
             else:
+                messages.error(request,"Invalid credentials")
                 
                 return redirect('login')
         else:
