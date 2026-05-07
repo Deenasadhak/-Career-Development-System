@@ -1,0 +1,363 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<!-- External Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+<style>
+    :root {
+        --primary: #6366f1;
+        --secondary: #a855f7;
+        --bg-dark: #0f172a;
+        --card-bg: #1e293b;
+        --glass: rgba(30, 41, 59, 0.7);
+        --glass-border: rgba(255, 255, 255, 0.1);
+        --text-dim: #94a3b8;
+    }
+
+    .results-container {
+        max-width: 1000px;
+        margin: 4rem auto;
+        padding: 0 1rem;
+    }
+
+    .header-section {
+        text-align: center;
+        margin-bottom: 4rem;
+    }
+
+    .score-circle {
+        width: 180px;
+        height: 180px;
+        border-radius: 50%;
+        background: conic-gradient(var(--primary) {{ global_percent }}%, rgba(255, 255, 255, 0.05) 0);
+        margin: 0 auto 2rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        box-shadow: 0 0 50px rgba(99, 102, 241, 0.2);
+    }
+
+    .score-circle::after {
+        content: '';
+        width: 150px;
+        height: 150px;
+        background: var(--bg-dark);
+        border-radius: 50%;
+        position: absolute;
+    }
+
+    .score-inner {
+        position: relative;
+        z-index: 1;
+        text-align: center;
+    }
+
+    .score-inner h2 {
+        font-size: 3rem;
+        margin: 0;
+        line-height: 1;
+    }
+
+    .score-inner p {
+        color: var(--text-dim);
+        font-size: 0.9rem;
+        margin: 0;
+    }
+
+    .grid-layout {
+        display: grid;
+        grid-template-columns: 1.2fr 1.8fr;
+        gap: 2rem;
+    }
+
+    @media (max-width: 992px) {
+        .grid-layout { grid-template-columns: 1fr; }
+    }
+
+    .card {
+        background: var(--glass);
+        backdrop-filter: blur(12px);
+        border: 1px solid var(--glass-border);
+        border-radius: 24px;
+        padding: 2.5rem;
+        height: 100%;
+    }
+
+    .radar-container {
+        width: 100%;
+        max-width: 400px;
+        margin: 0 auto 2rem;
+        aspect-ratio: 1;
+    }
+
+    .cat-info {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 0.5rem;
+        font-size: 0.9rem;
+    }
+
+    .bar-bg {
+        height: 8px;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 4px;
+        overflow: hidden;
+        margin-bottom: 1.5rem;
+    }
+
+    .bar-fill {
+        height: 100%;
+        background: var(--primary);
+        border-radius: 4px;
+    }
+
+    .ai-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1.2rem;
+        background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+        color: white;
+        border-radius: 25px;
+        font-size: 0.8rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        margin-bottom: 2rem;
+    }
+
+    .ai-feedback-content {
+        line-height: 1.8;
+        color: var(--text-dim);
+    }
+
+    .ai-feedback-content h1, .ai-feedback-content h2, .ai-feedback-content h3 {
+        color: white;
+        margin-top: 2rem;
+        margin-bottom: 1rem;
+        font-size: 1.4rem;
+        border-left: 4px solid var(--primary);
+        padding-left: 1rem;
+    }
+
+    .btn-action {
+        display: inline-block;
+        padding: 0.8rem 1.5rem;
+        background: var(--primary);
+        color: white;
+        text-decoration: none;
+        border-radius: 12px;
+        font-weight: 600;
+        transition: all 0.2s ease;
+    }
+
+    .btn-action:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(99, 102, 241, 0.2);
+    }
+</style>
+
+<div class="results-container">
+    <div class="header-section">
+        <div class="score-circle">
+            <div class="score-inner">
+                <h2>{{ global_percent }}</h2>
+                <p>Aptitude Index</p>
+            </div>
+        </div>
+        <h1>Advanced Professional Assessment</h1>
+        <p style="color: var(--text-dim); margin-bottom: 2rem;">A comprehensive evaluation of your skills, personality, and career potential.</p>
+        <a href="{% url 'retake_assessment' %}" class="btn-action" style="background: transparent; border: 1px solid rgba(255, 255, 255, 0.2); font-size: 0.85rem; padding: 0.5rem 1.2rem;">
+            <i class="fas fa-redo"></i> Retake New Assessment
+        </a>
+    </div>
+
+    <div class="grid-layout">
+        <div class="card">
+            <h3><i class="fas fa-project-diagram"></i> Personality Profile</h3>
+            <div class="radar-container">
+                <canvas id="aptitudeRadar"></canvas>
+            </div>
+            
+            <div class="category-list">
+                {% for cat, score in scores_list %}
+                <div class="cat-item">
+                    <div class="cat-info">
+                        <span style="font-weight: 600;">{{ cat }}</span>
+                        <span style="color: var(--primary);">{{ score }}%</span>
+                    </div>
+                    <div class="bar-bg">
+                        <div class="bar-fill" style="width: {{ score }}%"></div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="ai-badge">
+                <i class="fas fa-sparkles"></i> AI Advanced Insights
+            </div>
+            <h3><i class="fas fa-user-tie"></i> Executive Evaluation Report</h3>
+            
+            <div id="ai-feedback" class="ai-feedback-content">
+                <div style="text-align: center; padding: 2rem;" id="loading-ai">
+                    <i class="fas fa-circle-notch fa-spin fa-2x" style="color: var(--primary);"></i>
+                    <p style="margin-top: 1rem;">Architecting your growth plan...</p>
+                </div>
+                <div style="display: none;" id="raw-feedback">
+                    {{ ai_feedback|safe }}
+                </div>
+            </div>
+
+            <!-- New Growth CTA -->
+            <div style="margin-top: 3rem; text-align: center;">
+                <button onclick="openRoadmapModal()" class="btn-action" style="width: 100%; padding: 1.25rem; font-size: 1.1rem; background: linear-gradient(135deg, #a855f7 0%, #6366f1 100%); box-shadow: 0 15px 30px rgba(168, 85, 247, 0.3); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.75rem;">
+                    <span>🗺️</span> Generate My 4-Year Roadmap
+                </button>
+                <p style="margin-top: 1rem; font-size: 0.85rem; color: var(--text-dim);">Based on your top ML-predicted career path.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Roadmap Modal (Repurposed from Dashboard) -->
+<div id="careerModal" class="modal" style="display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(15px); align-items: center; justify-content: center;">
+    <div class="modal-content" style="background: #0f172a; padding: 3rem; border: 1px solid rgba(255,255,255,0.1); width: 90%; max-width: 800px; border-radius: 32px; max-height: 90vh; overflow-y: auto; position: relative;">
+        <span class="close" onclick="closeModal()" style="position: absolute; right: 2rem; top: 1.5rem; color: #94a3b8; font-size: 2rem; cursor: pointer;">&times;</span>
+        
+        <div id="modalRoadmapSection">
+            <h2 id="modalCourseName" style="color: white; font-size: 2rem; margin-bottom: 0.5rem;">Generating Path...</h2>
+            <p style="color: var(--primary); font-weight: 600; margin-bottom: 2rem; display: flex; align-items: center; gap: 0.5rem;">
+                <i class="fas fa-route"></i> AI-Optimized 4-Year Professional Roadmap
+            </p>
+            
+            <div id="roadmapLoader" style="text-align: center; padding: 3rem;">
+                <div class="loader-spinner" style="width: 50px; height: 50px; border: 5px solid rgba(255,255,255,0.1); border-top: 5px solid var(--primary); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 1.5rem;"></div>
+                <p style="color: var(--text-dim);">Our Skill Architect is crafting your future...</p>
+            </div>
+
+            <div id="roadmapContent" style="color: #cbd5e1; line-height: 1.8; font-size: 1.05rem;"></div>
+        </div>
+    </div>
+</div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function closeModal() {
+        document.getElementById('careerModal').style.display = 'none';
+        document.body.style.overflow = 'auto';
+    }
+
+    function openRoadmapModal() {
+        const modal = document.getElementById('careerModal');
+        const loader = document.getElementById('roadmapLoader');
+        const content = document.getElementById('roadmapContent');
+        const courseNameEl = document.getElementById('modalCourseName');
+
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+        loader.style.display = 'block';
+        content.innerHTML = '';
+        
+        // Step 1: Get the ML recommendation to find the Career Path ID
+        fetch('{% url "explore_career_ajax" %}')
+            .then(res => res.json())
+            .then(data => {
+                if (data.success && data.career_path_id) {
+                    courseNameEl.textContent = data.course_name;
+                    
+                    // Step 2: Generate the Roadmap
+                    return fetch(`/generate-roadmap/${data.career_path_id}/`);
+                } else {
+                    throw new Error(data.message || "No matching career path found for your profile.");
+                }
+            })
+            .then(res => res.json())
+            .then(data => {
+                loader.style.display = 'none';
+                if (data.content) {
+                    content.innerHTML = marked.parse(data.content);
+                } else {
+                    content.innerHTML = `<p style="color: #ef4444;">Error: ${data.error}</p>`;
+                }
+            })
+            .catch(err => {
+                loader.style.display = 'none';
+                courseNameEl.textContent = "Recommendation Issue";
+                content.innerHTML = `<p style="color: #ef4444;">${err.message}</p>`;
+            });
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // AI Feedback Rendering
+        const raw = document.getElementById('raw-feedback').innerHTML;
+        const loading = document.getElementById('loading-ai');
+        const feedbackContainer = document.getElementById('ai-feedback');
+        
+        if (loading) {
+            setTimeout(() => {
+                loading.style.display = 'none';
+                feedbackContainer.innerHTML = marked.parse(raw);
+            }, 500);
+        }
+
+        // Radar Chart Initialization
+        const ctx = document.getElementById('aptitudeRadar');
+        if (ctx) {
+            const labels = [{% for cat, score in scores_list %}"{{ cat|escapejs }}",{% endfor %}];
+            const data = [{% for cat, score in scores_list %}{{ score }},{% endfor %}];
+            
+            new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Psychological Profile',
+                        data: data,
+                        backgroundColor: 'rgba(168, 85, 247, 0.2)',
+                        borderColor: 'rgba(168, 85, 247, 1)',
+                        borderWidth: 2,
+                        pointBackgroundColor: 'rgba(99, 102, 241, 1)',
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            angleLines: { color: 'rgba(255, 255, 255, 0.1)' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                            pointLabels: { color: '#94a3b8', font: { size: 11, weight: '600' } },
+                            ticks: { display: false },
+                            suggestedMin: 0,
+                            suggestedMax: 100
+                        }
+                    },
+                    plugins: { legend: { display: false } }
+                }
+            });
+        }
+    });
+
+    // Close modal on escape or background click
+    window.onclick = function(event) {
+        const modal = document.getElementById('careerModal');
+        if (event.target == modal) closeModal();
+    }
+    document.addEventListener('keydown', e => { if(e.key === 'Escape') closeModal(); });
+</script>
+
+<style>
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    #roadmapContent h1, #roadmapContent h2, #roadmapContent h3 { color: white; margin-top: 1.5rem; margin-bottom: 1rem; font-size: 1.25rem; }
+    #roadmapContent ul { padding-left: 1.5rem; margin-bottom: 1.5rem; }
+    #roadmapContent li { margin-bottom: 0.5rem; }
+    #roadmapContent strong { color: var(--primary); }
+</style>
+{% endblock %}

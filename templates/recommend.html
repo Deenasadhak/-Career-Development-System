@@ -1,0 +1,177 @@
+{% extends 'base.html' %}
+
+{% block title %}Get Recommendation | Future Pathways{% endblock %}
+
+{% block content %}
+<style>
+    .recommend-container {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .form-card {
+        background: var(--card-bg);
+        border: 1px solid var(--glass-border);
+        border-radius: 24px;
+        padding: 3rem;
+        backdrop-filter: blur(12px);
+    }
+
+    .form-header {
+        text-align: center;
+        margin-bottom: 3rem;
+    }
+
+    .form-header h1 {
+        font-size: 2.5rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .form-header p {
+        color: var(--text-dim);
+    }
+
+    .input-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .input-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .input-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-size: 0.9rem;
+        color: var(--text-dim);
+        font-weight: 500;
+    }
+
+    .input-group select, .input-group input {
+        width: 100%;
+        padding: 0.8rem 1rem;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid var(--glass-border);
+        border-radius: 10px;
+        color: white;
+        font-size: 1rem;
+        appearance: none;
+        -webkit-appearance: none;
+    }
+
+    .input-group select {
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='white'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 1rem center;
+        background-size: 1.5em;
+    }
+
+    .input-group select option {
+        background-color: #111827;
+        color: white;
+    }
+
+    .full-width {
+        grid-column: 1 / -1;
+    }
+
+    .btn-submit {
+        width: 100%;
+        padding: 1rem;
+        font-size: 1.1rem;
+        margin-top: 1rem;
+    }
+
+    @media (max-width: 600px) {
+        .input-grid { grid-template-columns: 1fr; }
+    }
+</style>
+
+<div class="recommend-container">
+    <div class="form-card">
+        <div class="form-header">
+            <h1>Career Recommendation</h1>
+            <p>Tell us about your background to find the best path for you.</p>
+        </div>
+
+        <form method="POST">
+            {% csrf_token %}
+            <div class="input-grid">
+                <div class="input-group">
+                    <label>Current Stream</label>
+                    <select name="stream">
+                        {% for s in streams %}
+                            <option value="{{ s }}" {% if s == form_data.stream %}selected{% endif %}>{{ s }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label>Interest Area</label>
+                    <select name="interest">
+                        {% for i in interest_areas %}
+                            <option value="{{ i }}" {% if i == form_data.interest %}selected{% endif %}>{{ i }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label>Percentage in +2</label>
+                    <input type="number" name="percentage" placeholder="e.g. 85" value="{{ form_data.percentage }}">
+                </div>
+
+                <div class="input-group">
+                    <label>Preferred District</label>
+                    <select name="district">
+                        <option value="All Kerala">All Kerala</option>
+                        {% for d in districts %}
+                            <option value="{{ d }}" {% if d == form_data.district %}selected{% endif %}>{{ d }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="input-group full-width">
+                    <label>Key Skills / Hobbies</label>
+                    <input type="text" name="skills" placeholder="e.g. Coding, Painting, Public Speaking" value="{{ form_data.skills }}">
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-submit">
+                <i class="fas fa-magic" style="margin-right: 0.5rem;"></i> Generate Recommendation
+            </button>
+        </form>
+    </div>
+
+    {% if recommendations %}
+    <div style="margin-top: 4rem;">
+        <h2 style="text-align: center; margin-bottom: 2rem;">Recommended for You</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem;">
+            {% for item in recommendations %}
+            <div class="form-card" style="padding: 2rem;">
+                <h3 style="color: white; margin-bottom: 0.5rem;">{{ item.course.name }}</h3>
+                <p style="color: var(--primary); font-weight: 600; font-size: 0.9rem; margin-bottom: 1rem;">{{ item.college.name }}</p>
+                
+                <div style="display: flex; flex-direction: column; gap: 0.5rem; font-size: 0.85rem; color: var(--text-dim);">
+                    <span><i class="fas fa-map-marker-alt" style="width: 20px;"></i> {{ item.college.district }}</span>
+                    <span><i class="fas fa-chart-line" style="width: 20px;"></i> Demand Score: {{ item.course.kerala_demand_score }}/100</span>
+                    <span><i class="fas fa-university" style="width: 20px;"></i> Type: {{ item.college.college_type|default:"Private/Aided" }}</span>
+                </div>
+                
+                <div style="margin-top: 1.5rem;">
+                    <a href="{% url 'explore' %}?q={{ item.college.name|urlencode }}" class="btn btn-ghost" style="width: 100%; text-align: center; font-size: 0.8rem;">View Details</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% elif request.method == 'POST' %}
+    <div style="text-align: center; margin-top: 3rem; color: var(--text-dim);">
+        <i class="fas fa-search fa-3x" style="margin-bottom: 1rem; opacity: 0.2;"></i>
+        <p>No exact matches found. Try adjusting your percentage or choosing a different interest area.</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

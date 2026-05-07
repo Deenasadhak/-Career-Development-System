@@ -2,7 +2,7 @@ from django.urls import path
 from college import views
 
 urlpatterns=[
-    path('college_home/',views.CollegeHome.as_view(),name="college_home"),
+    path('dashboard/', views.CollegeHome.as_view(), name="college_dashboard"),
     path('college_profileadd/',views.CollegeProfileAdd.as_view(),name="college_ProfileAdd"),
     path('college_courseadd/',views.AddCourse.as_view(),name="course_Add"),
     path('college_profile/<int:pk>/',views.CollegeProfileView.as_view(),name="CProfile_view"),

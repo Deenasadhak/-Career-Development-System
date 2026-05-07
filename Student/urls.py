@@ -1,15 +1,15 @@
 from django.urls import path
 from Student import views
 
-
-urlpatterns=[
-    path('Studenthome/',views.StudentHome.as_view(),name='Stud_home'),
-    path('Student_profile/',views.Stud_AddProfile.as_view(),name='Stud_Aprofile'),
-    path('profile_view/<int:pk>/',views.Stud_profileView.as_view(),name='profile_view'),
-    path('profile_edit/<int:pk>/',views.Stud_profileEdit.as_view(),name='Sprofile_edit'),
-    path('collegeview/',views.CollegeView.as_view(),name='college_view'),
-    path('course_view/<int:pk>/',views.CourseView.as_view(),name='course_view'),
-    path('aptitude/',views.AptitudeTestView.as_view(),name='take_aptitude'),
-    path('filterd_college/<int:pk>/',views.Collegelist_Mark.as_view(),name='filterd_college'),
-
+urlpatterns = [
+    path('dashboard/', views.dashboard_view, name='student_dashboard'),
+    path('profile/', views.profile_view, name='student_profile'),
+    path('profile/edit/', views.edit_profile_view, name='edit_profile'),
+    path('assessment/', views.assessment_view, name='student_assessment'),
+    path('results/', views.results_view, name='student_results'),
+    path('course-guidance/', views.course_guidance_view, name='course_guidance'),
+    path('college-discovery/', views.college_discovery_view, name='college_discovery'),
+    path('career-guidance/', views.career_guidance_view, name='career_guidance'),
+    path('assessment/retake/', views.retake_assessment_view, name='retake_assessment'),
+    path('explore-career-ajax/', views.explore_career_ajax, name='explore_career_ajax'),
 ]

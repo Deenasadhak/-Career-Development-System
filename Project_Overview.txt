@@ -1,0 +1,79 @@
+================================================================================
+FUTURE PATHWAYS: AI-POWERED CAREER COUNSELLING PLATFORM FOR KERALA
+================================================================================
+
+1. PROJECT OVERVIEW
+------------------
+Future Pathways is a high-fidelity, data-driven web application designed to guide 
+students in Kerala through their academic and professional transitions. It combines 
+extensive regional dataset analysis with cutting-edge AI to provide personalized 
+career roadmaps, college recommendations, and aptitude assessments.
+
+2. CORE FEATURES
+----------------
+
+A. SMART STUDENT DASHBOARD
+   - The central command hub for every student.
+   - Profile Completion Engine: Tracks user data status (Personal, Academic, Interests).
+   - AI Insights Widget: Provides dynamic career advice based on the student's 12th-grade stream.
+   - Top Matches: Instant preview of highly recommended courses.
+   - Quick Action Cards: One-click access to Aptitude Tests, College Exploration, and Careers.
+
+B. AI-GENERATED CAREER ROADMAPS
+   - Powered by Google Gemini 1.5 Flash.
+   - Provides specialized, year-by-year guides for any career path (Medicine, Engineering, Arts, etc.).
+   - Context-Aware: Specifically tailored for Kerala students, highlighting local 
+     initiatives like K-DISC, ASAP Kerala, and Kerala Startup Mission (KSUM).
+   - Smart Fallback: Intelligent fallback system ensures high-quality guidance even 
+     if API connectivity is limited.
+
+C. COLLEGE DISCOVERY & KERALA DATASET
+   - Comprehensive database of colleges across all 14 districts of Kerala.
+   - Integrated "Shiksha-style" card interface with NIRF Rankings and NAAC Grades.
+   - "View Programs" Modal: Allows students to explore available courses at any 
+     college without leaving the page.
+   - Mapped over 140+ institutional-course relationships from the 
+     "Kerala_Colleges_and_Courses" dataset.
+
+D. SMART RECOMMENDATION ENGINE
+   - Multi-factor filtering: Matches students based on:
+     - Academic Marks (SSLC & +2 percentage).
+     - Geographic Preference (District-wise filtering).
+     - Stream Compatibility (Science, Commerce, Arts).
+     - Professional Interests (Coding, Healthcare, Business, etc.).
+   - Includes profile-completion gating to ensure high-quality, personalized results.
+
+E. APTITUDE ASSESSMENT SYSTEM
+   - Integrated testing module that evaluates student strengths.
+   - Scaled Scoring: Converts raw test marks into a standardized 600-point scale.
+   - Eligibility Gating: Uses scaled scores to predict admission eligibility 
+     based on historical college cutoffs.
+
+3. TECHNICAL ARCHITECTURE
+--------------------------
+- Backend: Django (Python)
+- Database: SQLite (Development) / PostgreSQL (Production ready)
+- AI Service: Google Generative AI (Gemini API)
+- Frontend: Vanilla CSS (Custom Design System), JavaScript (AJAX, Dynamic Modals)
+- Data Processing: Custom Management Commands for Excel/CSV dataset ingestion.
+- Aesthetic: Modern Dark-Mode (Navy/Purple/Glassmorphism) inspired by high-end 
+  educational portals like Shiksha.
+
+4. KEY DIRECTORIES & FILES
+--------------------------
+- /CarrierApp: Main logic for Auth, Landing, Explore, and Recommendation.
+- /Student: Student-specific dashboard, Profile management, and Aptitude tests.
+- /core: Shared models (Colleges, Courses) and AI services.
+- /templates: High-fidelity HTML templates with a unified dark-mode theme.
+- .env: Secure configuration for API keys and Secret keys.
+
+5. TARGET AUDIENCE
+------------------
+Primarily students in Kerala completing their 10th or 12th standards, looking for 
+data-backed guidance on higher education and career specialization within India 
+and globally.
+
+================================================================================
+Generated on: 2026-05-04
+Platform: Future Pathways
+================================================================================

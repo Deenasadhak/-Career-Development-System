@@ -1,0 +1,226 @@
+{% extends 'base.html' %}
+
+{% block title %}Career Paths | Future Pathways{% endblock %}
+
+{% block content %}
+<style>
+    .page-header {
+        margin-bottom: 4rem;
+        text-align: center;
+    }
+
+    .page-header h1 {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+    }
+
+    .career-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+        gap: 2.5rem;
+    }
+
+    .career-card {
+        background: var(--card-bg);
+        border: 1px solid var(--glass-border);
+        border-radius: 24px;
+        padding: 2.5rem;
+        position: relative;
+        overflow: hidden;
+        transition: all 0.4s ease;
+    }
+
+    .career-card:hover {
+        transform: translateY(-8px);
+        border-color: var(--primary);
+    }
+
+    .career-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        background: var(--primary);
+        opacity: 0.5;
+    }
+
+    .career-card h3 {
+        font-size: 1.5rem;
+        color: white;
+        margin-bottom: 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .course-tag {
+        font-size: 0.8rem;
+        color: var(--primary);
+        font-weight: 500;
+        margin-bottom: 1.5rem;
+        display: inline-block;
+        background: rgba(99, 102, 241, 0.1);
+        padding: 0.2rem 0.8rem;
+        border-radius: 12px;
+    }
+
+    .career-details {
+        margin-bottom: 2rem;
+    }
+
+    .detail-item {
+        margin-bottom: 1.25rem;
+    }
+
+    .detail-item label {
+        display: block;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: var(--text-dim);
+        margin-bottom: 0.4rem;
+    }
+
+    .detail-item p {
+        color: var(--text-main);
+        font-size: 0.95rem;
+        line-height: 1.5;
+    }
+
+    .salary-badge {
+        background: rgba(16, 185, 129, 0.1);
+        color: var(--success);
+        padding: 0.5rem 1rem;
+        border-radius: 12px;
+        font-weight: 600;
+        display: inline-block;
+        margin-top: 1rem;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 5rem;
+        grid-column: 1 / -1;
+        color: var(--text-dim);
+    }
+</style>
+
+<div class="page-header">
+    <h1>Explore Career Paths</h1>
+    <p>Find the roadmap to your dream profession with detailed insights.</p>
+</div>
+
+<div class="career-grid">
+    {% for path in career_paths %}
+    <div class="career-card">
+        <span class="course-tag">{{ path.course.name }}</span>
+        <h3>{{ path.career_path_name }}</h3>
+        
+        <div class="career-details">
+            <div class="detail-item">
+                <label>Top Job Roles</label>
+                <p>{{ path.top_job_roles }}</p>
+            </div>
+            
+            <div class="detail-item">
+                <label>Key Skills Required</label>
+                <p>{{ path.further_studies|default:"Professional expertise in the core field." }}</p>
+            </div>
+
+            {% if path.avg_salary_kerala %}
+            <div class="salary-badge">
+                <i class="fas fa-money-bill-wave" style="margin-right: 0.5rem;"></i>
+                Avg. Salary: {{ path.avg_salary_kerala }}
+            </div>
+            {% endif %}
+        </div>
+        
+        <button onclick="viewRoadmap({{ path.id }}, '{{ path.career_path_name }}')" class="btn btn-ghost" style="width: 100%; text-align: center;">View Full Roadmap</button>
+    </div>
+    {% empty %}
+    <div class="empty-state">
+        <i class="fas fa-briefcase fa-3x" style="margin-bottom: 1rem; opacity: 0.3;"></i>
+        <p>No career paths found in the database yet.</p>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Roadmap Modal -->
+<div id="roadmapModal" class="modal" style="display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(10px);">
+    <div class="modal-content" style="background: #111827; margin: 5% auto; padding: 3rem; border: 1px solid var(--glass-border); width: 80%; max-width: 800px; border-radius: 32px; max-height: 80vh; overflow-y: auto;">
+        <span class="close" onclick="closeRoadmap()" style="color: var(--text-dim); float: right; font-size: 28px; font-weight: bold; cursor: pointer;">&times;</span>
+        <h2 id="roadmapTitle" style="color: white; margin-bottom: 0.5rem;">Career Roadmap</h2>
+        <p style="color: var(--primary); font-size: 0.9rem; margin-bottom: 2rem; display: flex; align-items: center;">
+            <i class="fas fa-robot" style="margin-right: 0.5rem;"></i> AI-Generated Professional Guide
+        </p>
+        
+        <div id="roadmapLoader" style="display: none; text-align: center; padding: 3rem;">
+            <div class="loader-spinner" style="width: 50px; height: 50px; border: 5px solid rgba(255,255,255,0.1); border-top: 5px solid var(--primary); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 1.5rem;"></div>
+            <p style="color: var(--text-dim);">AI is crafting your personalized roadmap...</p>
+        </div>
+
+        <div id="roadmapBody" style="color: var(--text-main); line-height: 1.8; font-size: 1.05rem;">
+            <!-- Content will be injected here -->
+        </div>
+
+        <div style="margin-top: 3rem; display: flex; justify-content: flex-end; border-top: 1px solid var(--glass-border); padding-top: 2rem;">
+            <button onclick="closeRoadmap()" class="btn btn-primary">Got it!</button>
+        </div>
+    </div>
+</div>
+
+<style>
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    
+    #roadmapBody h1, #roadmapBody h2, #roadmapBody h3 { color: white; margin-top: 1.5rem; margin-bottom: 1rem; }
+    #roadmapBody ul { padding-left: 1.5rem; margin-bottom: 1.5rem; }
+    #roadmapBody li { margin-bottom: 0.5rem; }
+    #roadmapBody strong { color: var(--primary); }
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script>
+    function viewRoadmap(id, name) {
+        const modal = document.getElementById('roadmapModal');
+        const loader = document.getElementById('roadmapLoader');
+        const body = document.getElementById('roadmapBody');
+        const title = document.getElementById('roadmapTitle');
+
+        title.innerText = name + " Roadmap";
+        body.innerHTML = '';
+        loader.style.display = 'block';
+        modal.style.display = 'block';
+        document.body.style.overflow = 'hidden';
+
+        fetch(`/generate-roadmap/${id}/`)
+            .then(response => response.json())
+            .then(data => {
+                loader.style.display = 'none';
+                if (data.content) {
+                    body.innerHTML = marked.parse(data.content);
+                } else {
+                    body.innerHTML = `<p style="color: #ef4444;">Error: ${data.error}</p>`;
+                }
+            })
+            .catch(err => {
+                loader.style.display = 'none';
+                body.innerHTML = `<p style="color: #ef4444;">Failed to connect to AI service. Please try again later.</p>`;
+            });
+    }
+
+    function closeRoadmap() {
+        document.getElementById('roadmapModal').style.display = 'none';
+        document.body.style.overflow = 'auto';
+    }
+
+    // Close on background click
+    window.onclick = function(event) {
+        const modal = document.getElementById('roadmapModal');
+        if (event.target == modal) {
+            closeRoadmap();
+        }
+    }
+</script>
+{% endblock %}

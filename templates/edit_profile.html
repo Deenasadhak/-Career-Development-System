@@ -1,0 +1,345 @@
+{% extends 'base.html' %}
+
+{% block title %}Edit Profile | Future Pathways{% endblock %}
+
+{% block content %}
+<style>
+    .profile-container {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .form-card {
+        background: var(--card-bg);
+        border: 1px solid var(--glass-border);
+        border-radius: 24px;
+        padding: 3rem;
+        backdrop-filter: blur(12px);
+    }
+
+    .form-section {
+        margin-bottom: 2.5rem;
+    }
+
+    .form-section h3 {
+        color: var(--primary);
+        font-size: 1.1rem;
+        margin-bottom: 1.5rem;
+        border-bottom: 1px solid var(--glass-border);
+        padding-bottom: 0.5rem;
+    }
+
+    .input-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.5rem;
+    }
+
+    .input-group {
+        margin-bottom: 1.25rem;
+    }
+
+    .input-group label {
+        display: block;
+        font-size: 0.85rem;
+        color: var(--text-dim);
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+    }
+
+    .input-group input, .input-group select, .input-group textarea {
+        width: 100%;
+        padding: 0.8rem 1rem;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid var(--glass-border);
+        border-radius: 12px;
+        color: white;
+        font-size: 0.95rem;
+        transition: all 0.3s ease;
+    }
+
+    .input-group input:focus {
+        border-color: var(--primary);
+        background: rgba(255, 255, 255, 0.08);
+        outline: none;
+    }
+
+    .full-width {
+        grid-column: 1 / -1;
+    }
+
+    .btn-save {
+        width: 100%;
+        padding: 1rem;
+        font-size: 1.1rem;
+        margin-top: 1rem;
+    }
+
+    @media (max-width: 600px) {
+        .input-grid { grid-template-columns: 1fr; }
+        .form-card { padding: 1.5rem; }
+    }
+
+    /* Select Fixes */
+    select option { background: #111827; color: white; }
+
+    /* Chips / Tags Styling */
+    .chips-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        padding: 0.8rem;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid var(--glass-border);
+        border-radius: 12px;
+        min-height: 50px;
+        margin-bottom: 1rem;
+    }
+
+    .chip {
+        background: var(--primary);
+        color: white;
+        padding: 0.4rem 0.8rem;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        animation: fadeIn 0.3s ease;
+    }
+
+    .chip i {
+        cursor: pointer;
+        font-size: 0.7rem;
+        opacity: 0.7;
+    }
+
+    .chip i:hover { opacity: 1; }
+
+    .suggestions-label {
+        font-size: 0.8rem;
+        color: var(--text-dim);
+        margin-bottom: 0.75rem;
+        display: block;
+    }
+
+    .suggestions-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .suggestion-tag {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid var(--glass-border);
+        color: var(--text-dim);
+        padding: 0.3rem 0.7rem;
+        border-radius: 15px;
+        font-size: 0.8rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .suggestion-tag:hover {
+        background: rgba(99, 102, 241, 0.1);
+        border-color: var(--primary);
+        color: white;
+    }
+
+    .suggestion-tag.active {
+        display: none;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: scale(0.9); }
+        to { opacity: 1; transform: scale(1); }
+    }
+</style>
+
+<div class="profile-container">
+    <div class="form-card">
+        <div style="margin-bottom: 2.5rem;">
+            <h1 style="font-size: 2.2rem; margin-bottom: 0.5rem;">Complete Your Profile</h1>
+            <p style="color: var(--text-dim);">Your data helps our AI recommend the most suitable colleges and careers in Kerala.</p>
+        </div>
+
+        <form method="POST">
+            {% csrf_token %}
+            
+            <!-- Personal Info -->
+            <div class="form-section">
+                <h3>Personal Information</h3>
+                <div class="input-grid">
+                    <div class="input-group">
+                        <label>Full Name</label>
+                        {{ form.full_name }}
+                        {% if form.full_name.errors %}<div class="error-msg">{{ form.full_name.errors.0 }}</div>{% endif %}
+                    </div>
+                    <div class="input-group">
+                        <label>Date of Birth</label>
+                        {{ form.dob }}
+                        {% if form.dob.errors %}<div class="error-msg">{{ form.dob.errors.0 }}</div>{% endif %}
+                    </div>
+                    <div class="input-group">
+                        <label>Gender</label>
+                        {{ form.gender }}
+                        {% if form.gender.errors %}<div class="error-msg">{{ form.gender.errors.0 }}</div>{% endif %}
+                    </div>
+                    <div class="input-group">
+                        <label>Phone Number</label>
+                        {{ form.phone }}
+                        {% if form.phone.errors %}<div class="error-msg">{{ form.phone.errors.0 }}</div>{% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Location -->
+            <div class="form-section">
+                <h3>Location Details</h3>
+                <div class="input-grid">
+                    <div class="input-group">
+                        <label>District</label>
+                        {{ form.district }}
+                        {% if form.district.errors %}<div class="error-msg">{{ form.district.errors.0 }}</div>{% endif %}
+                    </div>
+                    <div class="input-group">
+                        <label>Place/Town</label>
+                        {{ form.place }}
+                        {% if form.place.errors %}<div class="error-msg">{{ form.place.errors.0 }}</div>{% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Academic -->
+            <div class="form-section">
+                <h3>Academic Background</h3>
+                <div class="input-grid">
+                    <div class="input-group">
+                        <label>SSLC / 10th Percentage</label>
+                        {{ form.sslc_percentage }}
+                        {% if form.sslc_percentage.errors %}<div class="error-msg">{{ form.sslc_percentage.errors.0 }}</div>{% endif %}
+                    </div>
+                    <div class="input-group">
+                        <label>+2 Stream</label>
+                        {{ form.stream_12th }}
+                        {% if form.stream_12th.errors %}<div class="error-msg">{{ form.stream_12th.errors.0 }}</div>{% endif %}
+                    </div>
+                    <div class="input-group full-width">
+                        <label>+2 Percentage</label>
+                        {{ form.twelfth_percentage }}
+                        {% if form.twelfth_percentage.errors %}<div class="error-msg">{{ form.twelfth_percentage.errors.0 }}</div>{% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Interests -->
+            <div class="form-section">
+                <h3>Interests & Aspirations</h3>
+                <div class="input-group full-width">
+                    <label>Selected Interests</label>
+                    <div id="active-chips" class="chips-container">
+                        <!-- Chips will be added here via JS -->
+                    </div>
+                    
+                    <div style="display: none;">
+                        {{ form.interest_keywords }}
+                    </div>
+                    {% if form.interest_keywords.errors %}<div class="error-msg">{{ form.interest_keywords.errors.0 }}</div>{% endif %}
+
+                    <span class="suggestions-label">Click to add suggestions:</span>
+                    <div id="suggestions-list" class="suggestions-list">
+                        <!-- Suggested tags will be added here based on stream -->
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-save">
+                <i class="fas fa-save" style="margin-right: 0.5rem;"></i> Save Profile
+            </button>
+            <a href="{% url 'student_dashboard' %}" style="display: block; text-align: center; margin-top: 1.5rem; color: var(--text-dim); text-decoration: none; font-size: 0.9rem;">
+                Back to Dashboard
+            </a>
+        </form>
+    </div>
+</div>
+
+<script>
+    const streamField = document.querySelector('select[name="stream_12th"]');
+    const hiddenInput = document.querySelector('input[name="interest_keywords"]');
+    const chipsContainer = document.getElementById('active-chips');
+    const suggestionsList = document.getElementById('suggestions-list');
+    
+    const streamSuggestions = {
+        'Science': [
+            'Coding', 'Medicine', 'Engineering', 'AI', 'Robotics', 'Physics', 'Biology', 
+            'Data Science', 'Space', 'Chemistry', 'Cybersecurity', 'Biotechnology', 
+            'Astronomy', 'Pharmacology', 'Environmental Science', 'Aeronautics', 'Mathematics'
+        ],
+        'Commerce': [
+            'Accounting', 'Banking', 'Investment', 'Marketing', 'Business', 'Logistics', 
+            'Stock Market', 'HR', 'Finance', 'E-commerce', 'Auditing', 'Entrepreneurship', 
+            'Insurance', 'Supply Chain', 'Economics', 'Management'
+        ],
+        'Arts': [
+            'Design', 'Law', 'Psychology', 'Journalism', 'Literature', 'Social Work', 
+            'Fashion', 'Music', 'History', 'Acting', 'Photography', 'Interior Design', 
+            'Public Relations', 'Fine Arts', 'Anthropology', 'Political Science', 'Sociology'
+        ],
+        'default': [
+            'Communication', 'Leadership', 'Management', 'Creativity', 'Technology', 
+            'Social Media', 'Sports', 'Photography', 'Travel', 'Public Speaking', 'Critical Thinking'
+        ]
+    };
+
+    let activeInterests = hiddenInput.value ? hiddenInput.value.split(',').map(s => s.trim()).filter(s => s) : [];
+
+    function updateHiddenInput() {
+        hiddenInput.value = activeInterests.join(', ');
+    }
+
+    function renderChips() {
+        chipsContainer.innerHTML = '';
+        activeInterests.forEach(interest => {
+            const chip = document.createElement('div');
+            chip.className = 'chip';
+            chip.innerHTML = `${interest} <i class="fas fa-times" onclick="removeInterest('${interest}')"></i>`;
+            chipsContainer.appendChild(chip);
+        });
+        updateHiddenInput();
+        renderSuggestions();
+    }
+
+    function renderSuggestions() {
+        const stream = streamField.value || 'default';
+        const suggestions = streamSuggestions[stream] || streamSuggestions['default'];
+        
+        suggestionsList.innerHTML = '';
+        suggestions.forEach(tag => {
+            if (!activeInterests.includes(tag)) {
+                const tagEl = document.createElement('div');
+                tagEl.className = 'suggestion-tag';
+                tagEl.textContent = tag;
+                tagEl.onclick = () => addInterest(tag);
+                suggestionsList.appendChild(tagEl);
+            }
+        });
+    }
+
+    function addInterest(interest) {
+        if (!activeInterests.includes(interest)) {
+            activeInterests.push(interest);
+            renderChips();
+        }
+    }
+
+    window.removeInterest = function(interest) {
+        activeInterests = activeInterests.filter(i => i !== interest);
+        renderChips();
+    }
+
+    streamField.addEventListener('change', renderSuggestions);
+
+    // Initial render
+    renderChips();
+</script>
+{% endblock %}

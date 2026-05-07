@@ -1,0 +1,337 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+    :root {
+        --primary: #6366f1;
+        --primary-dark: #4f46e5;
+        --bg-dark: #0f172a;
+        --card-bg: #1e293b;
+        --text-main: #f8fafc;
+        --text-dim: #94a3b8;
+        --glass: rgba(30, 41, 59, 0.7);
+        --glass-border: rgba(255, 255, 255, 0.1);
+    }
+
+    .test-container {
+        max-width: 800px;
+        margin: 4rem auto;
+        padding: 0 1rem;
+    }
+
+    .test-header {
+        text-align: center;
+        margin-bottom: 3rem;
+    }
+
+    .test-header h1 {
+        font-size: 2.5rem;
+        background: linear-gradient(135deg, #fff 0%, #94a3b8 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 1rem;
+    }
+
+    .progress-wrapper {
+        background: var(--card-bg);
+        padding: 1.5rem;
+        border-radius: 20px;
+        border: 1px solid var(--glass-border);
+        margin-bottom: 2rem;
+    }
+
+    .progress-info {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 1rem;
+        color: var(--text-dim);
+        font-size: 0.9rem;
+    }
+
+    .progress-bar-bg {
+        height: 8px;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 4px;
+        overflow: hidden;
+    }
+
+    .progress-bar-fill {
+        height: 100%;
+        background: linear-gradient(90deg, var(--primary) 0%, #a855f7 100%);
+        width: 0%;
+        transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .question-card {
+        background: var(--glass);
+        backdrop-filter: blur(12px);
+        border: 1px solid var(--glass-border);
+        border-radius: 24px;
+        padding: 2.5rem;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+        display: none; /* Controlled by JS */
+    }
+
+    .question-card.active {
+        display: block;
+        animation: slideIn 0.5s ease;
+    }
+
+    @keyframes slideIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .category-tag {
+        display: inline-block;
+        padding: 0.4rem 1rem;
+        background: rgba(99, 102, 241, 0.1);
+        color: var(--primary);
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        margin-bottom: 1.5rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .question-text {
+        font-size: 1.4rem;
+        font-weight: 500;
+        margin-bottom: 2rem;
+        line-height: 1.4;
+    }
+
+    .options-grid {
+        display: grid;
+        gap: 1rem;
+    }
+
+    .option-item {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid var(--glass-border);
+        padding: 1.2rem 1.5rem;
+        border-radius: 16px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .option-item:hover {
+        background: rgba(255, 255, 255, 0.07);
+        border-color: var(--primary);
+        transform: translateX(5px);
+    }
+
+    .option-item.selected {
+        background: rgba(99, 102, 241, 0.15);
+        border-color: var(--primary);
+        box-shadow: 0 0 20px rgba(99, 102, 241, 0.2);
+    }
+
+    .option-radio {
+        width: 20px;
+        height: 20px;
+        border: 2px solid var(--glass-border);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease;
+    }
+
+    .option-item.selected .option-radio {
+        border-color: var(--primary);
+        background: var(--primary);
+    }
+
+    .option-item.selected .option-radio::after {
+        content: '';
+        width: 8px;
+        height: 8px;
+        background: white;
+        border-radius: 50%;
+    }
+
+    .nav-buttons {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 3rem;
+    }
+
+    .btn-nav {
+        padding: 0.8rem 2rem;
+        border-radius: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        border: 1px solid var(--glass-border);
+    }
+
+    .btn-prev {
+        background: transparent;
+        color: var(--text-dim);
+    }
+
+    .btn-prev:hover {
+        background: rgba(255, 255, 255, 0.05);
+        color: white;
+    }
+
+    .btn-next {
+        background: var(--primary);
+        color: white;
+        border: none;
+    }
+
+    .btn-next:hover {
+        background: var(--primary-dark);
+        transform: translateY(-2px);
+    }
+
+    .btn-submit {
+        background: #10b981;
+        color: white;
+        border: none;
+        display: none;
+    }
+
+    .btn-submit:hover {
+        background: #059669;
+    }
+</style>
+
+<div class="test-container">
+    <div class="test-header">
+        <h1>Aptitude Assessment</h1>
+        <p style="color: var(--text-dim);">Discover your core strengths and career alignment</p>
+    </div>
+
+    <div class="progress-wrapper">
+        <div class="progress-info">
+            <span>Question <span id="current-idx">1</span> of {{ questions|length }}</span>
+            <span id="percent-complete">0% Complete</span>
+        </div>
+        <div class="progress-bar-bg">
+            <div id="progress-fill" class="progress-bar-fill"></div>
+        </div>
+    </div>
+
+    <form id="aptitude-form" method="POST">
+        {% csrf_token %}
+        
+        {% for q in questions %}
+        <div class="question-card {% if forloop.first %}active{% endif %}" data-q-idx="{{ forloop.counter0 }}">
+            <span class="category-tag">{{ q.category }}</span>
+            <div class="question-text">{{ q.question }}</div>
+            
+            <div class="options-grid">
+                {% for a in answers %}
+                {% if a.question_id == q.id %}
+                <div class="option-item" onclick="selectOption(this, 'q_{{ q.id }}_input', '{{ a.id }}')">
+                    <div class="option-radio"></div>
+                    <span>{{ a.answer }}</span>
+                </div>
+                {% endif %}
+                {% endfor %}
+            </div>
+            <input type="hidden" name="question_{{ q.id }}" id="q_{{ q.id }}_input">
+        </div>
+        {% endfor %}
+
+        <div class="nav-buttons">
+            <button type="button" class="btn-nav btn-prev" id="btn-prev" disabled onclick="prevQuestion()">Previous</button>
+            <button type="button" class="btn-nav btn-next" id="btn-next" onclick="nextQuestion()">Next Question</button>
+            <button type="submit" class="btn-nav btn-submit" id="btn-submit">Submit Assessment</button>
+        </div>
+    </form>
+</div>
+
+<script>
+    let currentIdx = 0;
+    const totalQuestions = {{ questions|length }};
+    const cards = document.querySelectorAll('.question-card');
+    const fill = document.getElementById('progress-fill');
+    const currentIdxDisplay = document.getElementById('current-idx');
+    const percentDisplay = document.getElementById('percent-complete');
+    const btnNext = document.getElementById('btn-next');
+    const btnPrev = document.getElementById('btn-prev');
+    const btnSubmit = document.getElementById('btn-submit');
+
+    function selectOption(element, inputId, value) {
+        // Deselect others in this card
+        const card = element.closest('.question-card');
+        card.querySelectorAll('.option-item').forEach(opt => opt.classList.remove('selected'));
+        
+        // Select this one
+        element.classList.add('selected');
+        document.getElementById(inputId).value = value;
+    }
+
+    function updateProgress() {
+        const percent = ((currentIdx + 1) / totalQuestions) * 100;
+        fill.style.width = percent + '%';
+        currentIdxDisplay.textContent = currentIdx + 1;
+        percentDisplay.textContent = Math.round(percent) + '% Complete';
+        
+        btnPrev.disabled = currentIdx === 0;
+        
+        if (currentIdx === totalQuestions - 1) {
+            btnNext.style.display = 'none';
+            btnSubmit.style.display = 'block';
+        } else {
+            btnNext.style.display = 'block';
+            btnSubmit.style.display = 'none';
+        }
+    }
+
+    function nextQuestion() {
+        // Check if answered
+        const currentCard = cards[currentIdx];
+        const input = currentCard.querySelector('input[type="hidden"]');
+        if (!input.value) {
+            alert('Please select an option before moving to the next question.');
+            return;
+        }
+
+        if (currentIdx < totalQuestions - 1) {
+            cards[currentIdx].classList.remove('active');
+            currentIdx++;
+            cards[currentIdx].classList.add('active');
+            updateProgress();
+        }
+    }
+
+    function prevQuestion() {
+        if (currentIdx > 0) {
+            cards[currentIdx].classList.remove('active');
+            currentIdx--;
+            cards[currentIdx].classList.add('active');
+            updateProgress();
+        }
+    }
+
+    // Initialize progress
+    updateProgress();
+
+    // Loading state for submission with validation
+    document.getElementById('aptitude-form').addEventListener('submit', function(e) {
+        // Validate last question
+        const currentCard = cards[currentIdx];
+        const input = currentCard.querySelector('input[type="hidden"]');
+        if (!input.value) {
+            e.preventDefault();
+            alert('Please select an option for the final question before submitting.');
+            return;
+        }
+
+        const btn = document.getElementById('btn-submit');
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Analyzing Results...';
+        btn.style.opacity = '0.7';
+    });
+</script>
+{% endblock %}
